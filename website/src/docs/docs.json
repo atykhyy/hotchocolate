@@ -476,8 +476,16 @@
                 "title": "Overview"
               },
               {
+                "path": "request-middleware",
+                "title": "Request middleware"
+              },
+              {
                 "path": "field-middleware",
                 "title": "Field middleware"
+              },
+              {
+                "path": "resolver-compiler",
+                "title": "Resolver compiler"
               }
             ]
           },
