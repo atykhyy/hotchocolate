@@ -484,6 +484,18 @@
                 "title": "Field middleware"
               },
               {
+                "path": "global-state",
+                "title": "Global state"
+              },
+              {
+                "path": "Scoped state",
+                "title": "Scoped state"
+              },
+              {
+                "path": "local-state",
+                "title": "Local state"
+              },
+              {
                 "path": "resolver-compiler",
                 "title": "Resolver compiler"
               }
@@ -534,10 +546,6 @@
               {
                 "path": "interceptors",
                 "title": "Interceptors"
-              },
-              {
-                "path": "global-state",
-                "title": "Global State"
               },
               {
                 "path": "introspection",

@@ -2,6 +2,10 @@
 title: Field middleware
 ---
 
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/Ut33sSTYmgw"frameborder="0"
+allowfullscreen></iframe>
+
 The field middleware is one of the fundamental components in Hot Chocolate. It allows you to create reuseable logic that can be run before or after a field resolver. Field middleware is composable, so you can specify multiple middleware and they will be executed in order. The field resolver is always the last element in this middleware chain.
 
 Each field middleware only knows about the next element in the chain and can choose to
@@ -297,3 +301,5 @@ descriptor
         }
     })
 ```
+
+TODO: UseField
