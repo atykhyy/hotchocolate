@@ -23,7 +23,7 @@ allowfullscreen></iframe>
 
 # Benefits
 
-<!-- There are two main benefits to using persisted queries: -->
+There are two main benefits to using persisted queries:
 
 **Performance**
 
@@ -31,9 +31,9 @@ allowfullscreen></iframe>
 - Queries no longer need to be embedded into the client code, reducing the bundle size in the case of websites.
 - Hot Chocolate can optimize the execution of persisted queries, as they will always be the same.
 
-<!-- **Security**
+**Security**
 
-The server can be tweaked to [only accept persisted queries](#blocking-regular-queries) and refuse queries created by a client at runtime. This is useful mainly for public APIs. -->
+The server can be tweaked to [only accept persisted queries](#blocking-regular-queries) and refuse queries created by a client at runtime.
 
 # Usage
 
@@ -139,6 +139,44 @@ AddSha256DocumentHashProvider(HashFormat.Base64)
 ```
 
 > Note: [Relay](https://relay.dev) uses the MD5 hashing algorithm - no additional Hot Chocolate configuration is required.
+
+# Blocking regular queries
+
+TODO
+
+```csharp
+builder.Services
+    .AddGraphQLServer()
+    .AddQueryType<Query>()
+    .UseInstrumentations()
+    .UseExceptions()
+    .UseTimeout()
+    .UseDocumentCache()
+    .UseReadPersistedQuery()
+    .UseRequest(next => async context =>
+    {
+        if ((context.Request.Query is null && (context.IsCachedDocument || context.IsPersistedDocument)) ||
+            context.ContextData.ContainsKey("admin"))
+        {
+            await next(context);
+            return;
+        }
+
+        var error =
+            ErrorBuilder.New()
+                .SetMessage("only persisted queries!")
+                .Build();
+
+        context.Result = QueryResultBuilder.CreateError(error);
+    })
+    .UseDocumentParser()
+    .UseDocumentValidation()
+    .UseOperationCache()
+    .UseOperationComplexityAnalyzer()
+    .UseOperationResolver()
+    .UseOperationVariableCoercion()
+    .UseOperationExecution();
+```
 
 # Client expectations
 
