@@ -30,7 +30,7 @@ TODO
 
 # Local state
 
-TODO
+Local state allows you to share data between field middleware and the actual resolver.
 
 [Learn more about local state](/docs/hotchocolate/v12/execution-engine/local-state)
 
