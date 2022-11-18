@@ -6,6 +6,11 @@ using HotChocolate.Execution.Processing.Tasks;
 
 namespace HotChocolate.Execution.Processing;
 
+public interface IDeferredSkippable
+{
+    bool Skip { get; }
+}
+
 /// <summary>
 /// Represents the work to executed the deferred elements of a stream.
 /// </summary>
@@ -88,12 +93,15 @@ internal sealed class DeferredStream : IDeferredExecutionTask
         operationContext.Scheduler.Register(_task);
         await operationContext.Scheduler.ExecuteAsync().ConfigureAwait(false);
 
+        if (_task.HasNext)
+        {
+            operationContext.Scheduler.DeferredWork.Register(this);
+        }
+
         if (_task.ChildTask is null)
         {
             return null;
         }
-
-        operationContext.Scheduler.DeferredWork.Register(this);
 
         IQueryResult result = operationContext
             .TrySetNext(true)
@@ -122,6 +130,8 @@ internal sealed class DeferredStream : IDeferredExecutionTask
 
         protected override IExecutionTaskContext Context { get; }
 
+        public bool HasNext { get; private set; }
+
         public ResolverTask? ChildTask { get; private set; }
 
         protected override async ValueTask ExecuteAsync(CancellationToken cancellationToken)
@@ -132,6 +142,13 @@ internal sealed class DeferredStream : IDeferredExecutionTask
 
             if (hasNext)
             {
+                HasNext = true;
+
+                if (_deferredStream.Enumerator.Current is IDeferredSkippable s && s.Skip)
+                {
+                    return;
+                }
+
                 ChildTask = ResolverTaskFactory.EnqueueElementTasks(
                     _operationContext,
                     _deferredStream.Selection,

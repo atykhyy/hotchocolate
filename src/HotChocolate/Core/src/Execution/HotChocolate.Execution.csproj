@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <RepositoryUrl>https://github.com/atykhyy/hotchocolate</RepositoryUrl>
+    <Version>12.15.2.1</Version>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <PackageId>HotChocolate.Execution</PackageId>
     <AssemblyName>HotChocolate.Execution</AssemblyName>
     <RootNamespace>HotChocolate.Execution</RootNamespace>
